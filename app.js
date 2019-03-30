@@ -1,3 +1,13 @@
+var admin = require("firebase-admin");
+
+var serviceAccount = require("/home/yash/Water-Management/watermanagement-1f21d-firebase-adminsdk-hjbbl-b3263800c3.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://watermanagement-1f21d.firebaseio.com"
+});
+
+
 var Tx     = require('ethereumjs-tx')
 const Web3 = require('web3')
 const web3 = new Web3('https://rinkeby.infura.io/v3/272f7fc703154ec8a6296bbbcf1921f2')
@@ -37,10 +47,5 @@ const abi = [{"constant":true,"inputs":[],"name":"mintingFinished","outputs":[{"
 const address = '0xd26114cd6EE289AccF82350c8d8487fedB8A0C07'
 
 const contract = new web3.eth.Contract(abi, address)
-//console.log(contract)
+console.log(contract)
 
-web3.eth.getBlockNumber().then((latest) => {
-  for (let i = 0; i < 5; i++) {
-    web3.eth.getHashrate(latest - i).then(console.log)
-  }
-})
