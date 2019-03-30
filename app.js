@@ -23,7 +23,7 @@ web3.eth.getTransactionCount(account2, (err, txCount) => {
   const txObject = {
     nonce:    web3.utils.toHex(txCount),
     to:       account1,
-    value:    web3.utils.toHex(web3.utils.toWei('0.1', 'ether')),
+    value:    web3.utils.toHex(web3.utils.toWei('0.01', 'ether')),
     gasLimit: web3.utils.toHex(21000),
     gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei'))
   }
@@ -47,5 +47,42 @@ const abi = [{"constant":true,"inputs":[],"name":"mintingFinished","outputs":[{"
 const address = '0xd26114cd6EE289AccF82350c8d8487fedB8A0C07'
 
 const contract = new web3.eth.Contract(abi, address)
-console.log(contract)
+web3.eth.getGasPrice().then((res)=>{console.log(res)});
+//console.log(contract)
 
+var balance = web3.eth.getBalance(account1);
+console.log(balance)
+
+web3.eth.getBlockNumber().then((latest) => {
+  for (let i = 0; i < 10; i++) {
+    web3.eth.getBlock(latest - i).then((res)=>{console.log(res.parentHash)})
+  }
+})
+
+const express = require('express')
+const app = express()
+const port = 3000
+
+app.use(express.static(__dirname + '/public'));
+
+// set the view engine to ejs
+app.set('view engine', 'ejs')
+
+
+
+app.get('/', function (req, res) {
+   res.render("index");
+})
+
+app.get('/Supplier', function (req, res) {
+   res.render("Supplier");
+})
+
+app.get('/Collector', function (req, res) {
+   res.render("Collector");
+})
+
+app.get('/Transactions', function (req, res) {
+   res.render("Transactions");
+})
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
