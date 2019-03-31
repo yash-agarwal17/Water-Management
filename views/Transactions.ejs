@@ -71,8 +71,23 @@
 
 </ul>
 </div>
-
-	
+<button type="button" value="Submit" onclick="myclick()" >
+Click here~!
+<div id='mylink'></div>
+</button>
+<script type="text/javascript">
+function myclick(){
+    var myLink = document.getElementById('mylink');
+    myLink.onclick = function(){
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "js/transaction.js"; 
+            document.getElementsByTagName("head")[0].appendChild(script);
+            return false;
+    }
+    document.getElementById('mylink').click();
+}
+</script>
     <!--================Footer Area =================-->
 	<footer class="footer_area">
         <div class="container">

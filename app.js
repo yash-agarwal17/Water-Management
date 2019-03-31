@@ -1,6 +1,3 @@
-
-
-
 var Tx     = require('ethereumjs-tx')
 const Web3 = require('web3')
 const web3 = new Web3('https://rinkeby.infura.io/v3/272f7fc703154ec8a6296bbbcf1921f2')
@@ -47,7 +44,7 @@ var balance =  0
 web3.eth.getBalance(account1).then(ans => {
 	balance = ans
 });
-console.log(balance)
+console.log(balance/1000000000)
 
 
 const express = require('express')
@@ -82,7 +79,7 @@ app.get("/Transactions",function(req, res) {
 web3.eth.getBlockNumber().then((latest) => {
     web3.eth.getBlock(latest).then((res1)=>{
 	console.log(res1);
-	res.render("Transactions",{obj:res1,act1:account1,bal:balance});
+	res.render("Transactions",{obj:res1,act1:account1,bal:balance/1000000000});
 })
   
 }).catch(err => console.log(err))
