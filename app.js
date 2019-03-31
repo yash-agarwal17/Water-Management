@@ -1,11 +1,4 @@
-var admin = require("firebase-admin");
 
-var serviceAccount = require("/home/yash/Water-Management/watermanagement-1f21d-firebase-adminsdk-hjbbl-b3263800c3.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://watermanagement-1f21d.firebaseio.com"
-});
 
 
 var Tx     = require('ethereumjs-tx')
@@ -50,14 +43,12 @@ const contract = new web3.eth.Contract(abi, address)
 web3.eth.getGasPrice().then((res)=>{console.log(res)});
 //console.log(contract)
 
-var balance = web3.eth.getBalance(account1);
+var balance =  0
+web3.eth.getBalance(account1).then(ans => {
+	balance = ans
+});
 console.log(balance)
 
-web3.eth.getBlockNumber().then((latest) => {
-  for (let i = 0; i < 10; i++) {
-    web3.eth.getBlock(latest - i).then((res)=>{console.log(res.parentHash)})
-  }
-})
 
 const express = require('express')
 const app = express()
@@ -69,6 +60,10 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs')
 
 
+
+app.get('/index', function (req, res) {
+   res.render("index");
+})
 
 app.get('/', function (req, res) {
    res.render("index");
@@ -82,7 +77,14 @@ app.get('/Collector', function (req, res) {
    res.render("Collector");
 })
 
-app.get('/Transactions', function (req, res) {
-   res.render("Transactions");
+
+app.get("/Transactions",function(req, res) {
+web3.eth.getBlockNumber().then((latest) => {
+    web3.eth.getBlock(latest).then((res1)=>{
+	console.log(res1);
+	res.render("Transactions",{obj:res1,act1:account1,bal:balance});
 })
+  
+}).catch(err => console.log(err))
+  });
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

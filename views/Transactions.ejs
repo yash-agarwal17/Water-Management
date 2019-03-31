@@ -39,7 +39,7 @@
 					<!-- Collect the nav links, forms, and other content for toggling -->
 					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 						<ul class="nav navbar-nav menu_nav justify-content-end">
-							<li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+							<li class="nav-item"><a class="nav-link" href="index">Home</a></li>
 							<li class="nav-item"><a class="nav-link" href="#">Web Monitoring</a></li>
 							<li class="nav-item"><a class="nav-link" href="#">Smart Tanks</a></li>
 							<li class="nav-item"><a class="nav-link" href="#">Find Tanks</a></li>
@@ -54,6 +54,22 @@
 	<!--================ End Header Area =================-->
 
 <div class="container">
+<br><br><br><br><br><br>
+<h3>My Account</h3>
+<br>
+<h5>Account Address :</h5><%=act1%>
+<br>
+<h5>Current Ethers :</h5><%=bal%> Gwei
+<br><br><br>
+<h4 class="text-uppercase">Last Transaction</h4>
+<ul class="list">
+
+    <li><span>Transaction Hash:</span><%=obj.hash%></li>
+    <li><span>Time Stamp:</span><%=obj.timestamp%></li>
+    <li><span>Amount:</span>0.01Ether</li>
+    <li><span>Gas Used:</span><%=obj.gasUsed%></li>
+
+</ul>
 </div>
 
 	

@@ -29,23 +29,70 @@
 			emailjs.init("user_JZTvuuUlCGx0tWpqgMNQH");
 	 })();
 	 </script>
-<script src="js\Dustbin1.js"></script>
+<script src="js\collector.js"></script>
 <script>
 
-
+	var result = [];
 	window.addEventListener("load", getData(genFunction));
 	var cdata = [];
 	function getData(callbackIN) {
-		var ref = firebase.database().ref("Dustbin10");
+		var ref = firebase.database().ref("Home1");
 
 		ref.once('value').then(function (snapshot) {
 			snapshot.forEach(function(childSnapshot) {
-				var childData = childSnapshot.val();
-				//console.log(childData);
-				cdata.push({
-					label: childData['Time'],
-					value: childData['Fill%']
+				childSnapshot.forEach(function(childSnapshot1) {
+				var childData = childSnapshot1._e.T;
+				result.push({
+					Ec: childData.split(",")[2],
+					ppm: childData.split(",")[4],
+					temp: childData.split(",")[6],
+					flag: childData.split(",")[0]
 				});
+
+				cdata.push({
+					label: childData.split(",")[4],
+					value: childData.split(",")[2]
+				});
+if(childData.split(",")[0]!="0.00")
+{
+	console.log("yes"+childData.split(",")[0]);
+
+var Tx     = require('ethereumjs-tx')
+const Web3 = require('web3')
+const web3 = new Web3('https://rinkeby.infura.io/v3/272f7fc703154ec8a6296bbbcf1921f2')
+
+const account1 = '0xC7b42dEbf6793B1290347dA651527228ca8B8BA4' // Your account address 1
+const account2 = '0xE638715D5a937Dc57E6D456E8391ddA9Cc45608b' // Your account address 2
+
+const privateKey1 = Buffer.from('89B068DEEBB47B1ABC2EAD4F5CDBE03B84715EDEDC060E26515EB44267810698', 'hex')
+const privateKey2 = Buffer.from('F3CD14E971484BE63FE1E6C0F3D784B6C35785A693269D957A9A9281BCF1609B', 'hex')
+
+web3.eth.getTransactionCount(account2, (err, txCount) => {
+  // Build the transaction
+  const txObject = {
+    nonce:    web3.utils.toHex(txCount),
+    to:       account1,
+    value:    web3.utils.toHex(web3.utils.toWei('0.01', 'ether')),
+    gasLimit: web3.utils.toHex(21000),
+    gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei'))
+  }
+
+  // Sign the transaction
+  const tx = new Tx(txObject)
+  tx.sign(privateKey2)
+
+  const serializedTx = tx.serialize()
+  const raw = '0x' + serializedTx.toString('hex')
+
+  // Broadcast the transaction
+  web3.eth.sendSignedTransaction(raw, (err, txHash) => {
+    console.log('txHash:', txHash)
+    // Now go check etherscan to see the transaction!
+  })
+})
+
+}
+				});	
 			});
 			callbackIN(snapshot.val())
 		});
@@ -61,7 +108,7 @@
 			dataFormat: 'json',
 			dataSource: {
 					"chart": {
-							"caption": "Percentage Filled",
+							"caption": "Parts per million",
 							"subCaptionFontBold": "0",
 							"captionFontSize": "20",
 							"subCaptionFontSize": "17",
@@ -105,9 +152,13 @@
 	});
 
 	firebaseChart.render();
-	cdata.reverse();
-	var recent = cdata[5]["value"];
-	document.getElementById("current").innerHTML = recent;
+	console.log(result);
+	result.reverse();
+	var recentec = result[0]["Ec"];
+	document.getElementById("conductivity").innerHTML = recentec;
+	var recenttemp = result[0]["temp"];
+	document.getElementById("temp").innerHTML = recenttemp;
+/*
 if(recent>80)
 {
 	var templateParams = {
@@ -121,7 +172,7 @@ if(recent>80)
 	}, function(error) {
 	console.log('FAILED...', error);
 	});
-}
+}*/
 	}
 
 </script>
@@ -144,7 +195,7 @@ if(recent>80)
 					<!-- Collect the nav links, forms, and other content for toggling -->
 					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 						<ul class="nav navbar-nav menu_nav justify-content-end">
-							<li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+							<li class="nav-item"><a class="nav-link" href="index">Home</a></li>
 							<li class="nav-item"><a class="nav-link" href="#">Web Monitoring</a></li>
 							<li class="nav-item"><a class="nav-link" href="#">Smart Tanks</a></li>
 							<li class="nav-item"><a class="nav-link" href="#">Find Tanks</a></li>
@@ -178,7 +229,8 @@ if(recent>80)
                             </p>
                             <ul class="list">
                                 <li><span>Location</span>: cc3</li>
-                                <li><span>Temperature</span>: <p id="current" style="display:inline;"><p></li>
+                                <li><span>Temperature</span>: <p id="temp" style="display:inline;"><p></li>
+				<li><span>Conductivity</span>: <p id="conductivity" style="display:inline;"><p></li>
                             </ul>
                         </div>
                     </div>
