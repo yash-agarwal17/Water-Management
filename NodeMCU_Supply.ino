@@ -8,8 +8,8 @@ SoftwareSerial NodeMCU(D2,D3);
 #define FIREBASE_HOST "xxxxxxx"                          // the project name address from firebase id
 #define FIREBASE_AUTH "XXXXXXXX"   
 
-#define WIFI_SSID "Tachyon"                                             // input your home or public wifi name 
-#define WIFI_PASSWORD "bepa8139"                                    //password of wifi ssid
+#define WIFI_SSID "xxxxxx"                                             // input your home or public wifi name 
+#define WIFI_PASSWORD "xxxxxx"                                    //password of wifi ssid
 
 
 void setup(){
